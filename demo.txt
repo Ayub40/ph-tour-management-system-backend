@@ -1,0 +1,11 @@
+1. router er api golo kivave jai
+   app.ts ---> index.ts ---> user.router.ts ---> user.controller.ts ---> user.service.ts
+
+2. Sobar age ki make korte hobe ,, 1. model  2. service  3. controller  4. route matching ,,, tarpor seta        
+   index.  ts  e set korbo
+
+3. 
+
+
+
+
