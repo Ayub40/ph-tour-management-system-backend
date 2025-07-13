@@ -3,9 +3,9 @@ import cors from "cors"
 // import { UserRoutes } from "./app/modules/user/user.route";
 import { router } from "./app/routes";
 import { globalErrorHandler } from "./app/middlewares/globalErrorHandler";
+import notFound from "./app/middlewares/notFound";
 // import { envVars } from "./app/config/env";
 // import httpStatus from 'http-status-codes';
-import notFound from "./app/middlewares/notFound";
 
 const app = express();
 

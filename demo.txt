@@ -1,10 +1,16 @@
+ctrl + shift + P ---> dia vs code er (developer reload windows) reload deoa hoy
+
 1. router er api golo kivave jai
    app.ts ---> index.ts ---> user.router.ts ---> user.controller.ts ---> user.service.ts
 
 2. Sobar age ki make korte hobe ,, 1. model  2. service  3. controller  4. route matching ,,, tarpor seta        
    index.  ts  e set korbo
 
-3. 
+3. jokhon new kono kiso kaj korbo , tokhon service file er kaj age korbo
+
+=========================================
+src/app/interfaces/index.d.ts ---> dia jodi user.controller.ts and checkAuth.ts er (user er error ta na jai) ,, tahole 
+ts.config.json ---> file e "compilerOptions" ta close kore (,) coma dia likhte hobe ("include":["./src/app/interfaces/index.d.ts"])
 
 
 
