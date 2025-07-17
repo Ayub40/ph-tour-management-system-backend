@@ -12,6 +12,9 @@ ctrl + shift + P ---> dia vs code er (developer reload windows) reload deoa hoy
 src/app/interfaces/index.d.ts ---> dia jodi user.controller.ts and checkAuth.ts er (user er error ta na jai) ,, tahole 
 ts.config.json ---> file e "compilerOptions" ta close kore (,) coma dia likhte hobe ("include":["./src/app/interfaces/index.d.ts"])
 
+// 29-5 Handling Mongoose Cast Error and Duplicate Error
+ei video te Mongoose and Zod er error Handling dekhano hoyse. (globalErrorHandler.ts) file e dekhano hoyse
+
 
 
 
