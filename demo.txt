@@ -12,6 +12,12 @@ ctrl + shift + P ---> dia vs code er (developer reload windows) reload deoa hoy
 src/app/interfaces/index.d.ts ---> dia jodi user.controller.ts and checkAuth.ts er (user er error ta na jai) ,, tahole 
 ts.config.json ---> file e "compilerOptions" ta close kore (,) coma dia likhte hobe ("include":["./src/app/interfaces/index.d.ts"])
 
+=========================================================
+29-1 Configure Passport JS For Custom Authentication
+=========================================================
+Custom Authentication -->
+1. passport.ts e LocalStrategy create kora eta auth.controller.ts a use kora
+2. 
 
 
 
