@@ -15,6 +15,12 @@ ts.config.json ---> file e "compilerOptions" ta close kore (,) coma dia likhte h
 // 29-5 Handling Mongoose Cast Error and Duplicate Error
 ei video te Mongoose and Zod er error Handling dekhano hoyse. (globalErrorHandler.ts) file e dekhano hoyse
 
+=========================================================
+29-1 Configure Passport JS For Custom Authentication
+=========================================================
+Custom Authentication -->
+1. passport.ts e LocalStrategy create kora eta auth.controller.ts a use kora
+2. 
 
 
 

@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextFunction, Request, Response } from "express"
-import { envVars } from "../config/env"
-import AppError from "../errorHelpers/AppError"
+import { NextFunction, Request, Response } from "express";
+import { envVars } from "../config/env";
+import AppError from "../errorHelpers/AppError";
+import { handleCastError } from "../helpers/handleCastError";
+import { handlerDuplicateError } from "../helpers/handlerDuplicateError";
+import { handlerValidationError } from "../helpers/handlerValidationError";
+import { handlerZodError } from "../helpers/handlerZodError";
+import { TErrorSources } from "../interfaces/error.types";
 
 export const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     if (envVars.NODE_ENV === "development") {
@@ -54,4 +59,3 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
         stack: envVars.NODE_ENV === "development" ? err.stack : null
     })
 }
-
