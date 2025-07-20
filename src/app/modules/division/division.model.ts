@@ -14,7 +14,8 @@ const divisionSchema = new Schema<IDivision>({
 divisionSchema.pre("save", async function (next) {
     if (this.isModified("name")) {
         const baseSlug = this.name.toLowerCase().split(" ").join("-")
-        let slug = `${baseSlug}-division`
+        // let slug = `${baseSlug}-division`
+        let slug = `${baseSlug}`
 
         let counter = 0;
         while (await Division.exists({ slug })) {

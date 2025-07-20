@@ -19,5 +19,17 @@ Custom Authentication -->
 1. passport.ts e LocalStrategy create kora eta auth.controller.ts a use kora
 2. 
 
+// 29-5 Handling Mongoose Cast Error and Duplicate Error
+ei video te Mongoose and Zod er error Handling dekhano hoyse. (globalErrorHandler.ts) file e dekhano hoyse
 
+==================================================
+Division ==> 1. division.interface.ts ---> 2. division.model.ts ---> 3. division.route.ts ---> 4. division.controller.ts ---> 5. division.service.ts ---> 6.division.validation.ts
+==================================================
 
+====================
+FILTERING 
+1. http://localhost:5000/api/v1/tour?searchTerm=gol (filter and search)
+2. http://localhost:5000/api/v1/tour?sort=location (sort)
+3. http://localhost:5000/api/v1/tour?fields=title ( title sodo dekhabae )
+4. http://localhost:5000/api/v1/tour?page=1&limit=2 ( pagination )
+====================
