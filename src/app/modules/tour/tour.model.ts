@@ -61,8 +61,8 @@ tourSchema.pre("findOneAndUpdate", async function (next) {
 
     if (tour.title) {
         const baseSlug = tour.title.toLowerCase().split(" ").join("-")
+        // let slug = `${baseSlug}-division`
         let slug = `${baseSlug}`
-
 
         let counter = 0;
         while (await Tour.exists({ slug })) {

@@ -27,6 +27,7 @@ export class QueryBuilder<T> {
     search(searchableField: string[]): this {
         const searchTerm = this.query.searchTerm || ""
         const searchQuery = {
+            // $options hosse case insensitive (capital or small letter kon problem hobe na )
             $or: searchableField.map(field => ({ [field]: { $regex: searchTerm, $options: "i" } }))
         }
         this.modelQuery = this.modelQuery.find(searchQuery)
@@ -34,7 +35,7 @@ export class QueryBuilder<T> {
     }
 
     sort(): this {
-
+        // "-createdAt" --> dile latest date ta dia sort hobe
         const sort = this.query.sort || "-createdAt";
 
         this.modelQuery = this.modelQuery.sort(sort)
