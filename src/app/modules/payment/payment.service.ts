@@ -44,7 +44,7 @@ const failPayment = async (query: Record<string, string>) => {
     session.startTransaction()
 
     try {
-        
+
         const updatedPayment = await Payment.findOneAndUpdate({ transactionId: query.transactionId }, {
             status: PAYMENT_STATUS.FAILED,
         }, { new: true, runValidators: true, session: session })
@@ -67,9 +67,42 @@ const failPayment = async (query: Record<string, string>) => {
     }
 };
 
+const cancelPayment = async (query: Record<string, string>) => {
+
+    // Update Booking Status to CANCEL
+    // Update Payment Status to CANCEL
+
+    const session = await Booking.startSession();
+    session.startTransaction()
+
+    try {
+
+
+        const updatedPayment = await Payment.findOneAndUpdate({ transactionId: query.transactionId }, {
+            status: PAYMENT_STATUS.CANCELLED,
+        }, { runValidators: true, session: session })
+
+        await Booking
+            .findByIdAndUpdate(
+                updatedPayment?.booking,
+                { status: BOOKING_STATUS.CANCEL },
+                { runValidators: true, session }
+            )
+
+        await session.commitTransaction(); //transaction
+        session.endSession()
+        return { success: false, message: "Payment Cancelled" }
+    } catch (error) {
+        await session.abortTransaction(); // rollback
+        session.endSession()
+        // throw new AppError(httpStatus.BAD_REQUEST, error) ❌❌
+        throw error
+    }
+};
+
 export const PaymentService = {
     // initPayment,
     successPayment,
     failPayment,
-    // cancelPayment,
+    cancelPayment,
 };
