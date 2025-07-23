@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { PaymentService } from "./payment.service";
 import { envVars } from "../../config/env";
 
+
 const successPayment = catchAsync(async (req: Request, res: Response) => {
     const query = req.query
     const result = await PaymentService.successPayment(query as Record<string, string>)
@@ -31,7 +32,7 @@ const cancelPayment = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const PaymentController = {
-    // initPayment,
+    initPayment,
     successPayment,
     failPayment,
     cancelPayment,
