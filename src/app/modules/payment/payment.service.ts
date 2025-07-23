@@ -35,9 +35,41 @@ const successPayment = async (query: Record<string, string>) => {
     }
 };
 
+const failPayment = async (query: Record<string, string>) => {
+
+    // Update Booking Status to FAIL
+    // Update Payment Status to FAIL
+
+    const session = await Booking.startSession();
+    session.startTransaction()
+
+    try {
+        
+        const updatedPayment = await Payment.findOneAndUpdate({ transactionId: query.transactionId }, {
+            status: PAYMENT_STATUS.FAILED,
+        }, { new: true, runValidators: true, session: session })
+
+        await Booking
+            .findByIdAndUpdate(
+                updatedPayment?.booking,
+                { status: BOOKING_STATUS.FAILED },
+                { runValidators: true, session }
+            )
+
+        await session.commitTransaction(); //transaction
+        session.endSession()
+        return { success: false, message: "Payment Failed" }
+    } catch (error) {
+        await session.abortTransaction(); // rollback
+        session.endSession()
+        // throw new AppError(httpStatus.BAD_REQUEST, error) ❌❌
+        throw error
+    }
+};
+
 export const PaymentService = {
     // initPayment,
     successPayment,
-    // failPayment,
+    failPayment,
     // cancelPayment,
 };
