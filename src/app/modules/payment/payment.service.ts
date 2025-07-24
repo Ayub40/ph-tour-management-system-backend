@@ -8,7 +8,7 @@ import { SSLService } from "../sslCommerz/sslCommerz.service";
 import { PAYMENT_STATUS } from "./payment.interface";
 import { Payment } from "./payment.model";
 
-
+// booking cancel korar poro abr booking korar system "initPayment" e show kora hoiese
 const initPayment = async (bookingId: string) => {
 
     const payment = await Payment.findOne({ booking: bookingId })
