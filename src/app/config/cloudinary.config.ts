@@ -4,6 +4,7 @@
 
 import { v2 as cloudinary } from "cloudinary";
 import { envVars } from "./env";
+import AppError from "../errorHelpers/AppError";
 
 // Amader folder -> image -> form data -> File -> Multer -> Amader project / pc te Nijer ekta folder(temporary) -> Req.file
 //req.file -> cloudinary(req.file) -> url -> mongoose -> mongodb
@@ -13,6 +14,27 @@ cloudinary.config({
     api_key: envVars.CLOUDINARY.CLOUDINARY_API_KEY,
     api_secret: envVars.CLOUDINARY.CLOUDINARY_API_SECRET
 })
+
+export const deleteImageFromCLoudinary = async (url: string) => {
+    try {
+        //"https://res.cloudinary.com/dybbzah6k/image/upload/v1753388011/n8gompo4s8-1753388009899-img20200112161418-jpg.jpg.jpg"
+
+        const regex = /\/v\d+\/(.*?)\.(jpg|jpeg|png|gif|webp)$/i;
+
+        const match = url.match(regex);
+
+        console.log({ match });
+
+        if (match && match[1]) {
+            const public_id = match[1];
+            await cloudinary.uploader.destroy(public_id)
+            console.log(`File ${public_id} is deleted from cloudinary`);
+
+        }
+    } catch (error: any) {
+        throw new AppError(401, "Cloudinary image deletion failed", error.message)
+    }
+}
 
 export const cloudinaryUpload = cloudinary
 
