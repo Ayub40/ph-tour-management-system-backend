@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import bcryptjs from 'bcryptjs';
@@ -62,22 +63,40 @@ const getNewAccessToken = async (refreshToken: string) => {
 
 }
 
-const resetPassword = async (oldPassword: string, newPassword: string, decodedToken: JwtPayload) => {
+const resetPassword = async (payload: Record<string, any>, decodedToken: JwtPayload) => {
+    if (payload.id != decodedToken.userId) {
+        throw new AppError(401, "You can not reset your password")
+    }
 
-    // const user = await User.findById(decodedToken.userId)
+    const isUserExist = await User.findById(decodedToken.userId)
+    if (!isUserExist) {
+        throw new AppError(401, "User does not exist")
+    }
 
-    // const isOldPasswordMatch = await bcryptjs.compare(oldPassword, user!.password as string)
-    // if (!isOldPasswordMatch) {
-    //     throw new AppError(httpStatus.UNAUTHORIZED, "Old Password does not match");
-    // }
+    const hashedPassword = await bcryptjs.hash(
+        // payload.newPassword (newPassword ta postman e likhte hobe , ekhane jeta dibo seta postman e likhte hobe)
+        payload.newPassword,
+        Number(envVars.BCRYPT_SALT_ROUND)
+    )
 
-    // user!.password = await bcryptjs.hash(newPassword, Number(envVars.BCRYPT_SALT_ROUND))
+    isUserExist.password = hashedPassword;
 
-    // user!.save();
-
-    return {}
-
+    await isUserExist.save()
 }
+
+// const resetPassword = async (oldPassword: string, newPassword: string, decodedToken: JwtPayload) => {
+// const user = await User.findById(decodedToken.userId)
+
+// const isOldPasswordMatch = await bcryptjs.compare(oldPassword, user!.password as string)
+// if (!isOldPasswordMatch) {
+//     throw new AppError(httpStatus.UNAUTHORIZED, "Old Password does not match");
+// }
+
+// user!.password = await bcryptjs.hash(newPassword, Number(envVars.BCRYPT_SALT_ROUND))
+// user!.save();
+// return {}
+
+// }
 
 const forgotPassword = async (email: string) => {
     const isUserExist = await User.findOne({ email });
@@ -118,7 +137,7 @@ const forgotPassword = async (email: string) => {
     })
 
     /**
-     * http://localhost:5173/reset-password?id=687f310c724151eb2fcf0c41&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODdmMzEwYzcyNDE1MWViMmZjZjBjNDEiLCJlbWFpbCI6InNhbWluaXNyYXI2QGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzUzMTY2MTM3LCJleHAiOjE3NTMxNjY3Mzd9.LQgXBmyBpEPpAQyPjDNPL4m2xLF4XomfUPfoxeG0MKg
+     * http://localhost:5173/reset-password?id=6887a719489f6cfe1748b0bb&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg3YTcxOTQ4OWY2Y2ZlMTc0OGIwYmIiLCJlbWFpbCI6ImtheXViMzQ1M0BnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MzcyMDg2MSwiZXhwIjoxNzUzNzIxNDYxfQ.pIQrOOUqmMe9BkYFXessOwW2OuoysIDiWq119sHzeUk
      */
 }
 
