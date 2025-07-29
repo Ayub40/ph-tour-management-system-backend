@@ -25,6 +25,7 @@ app.use(cookieParser());
 app.use(express.json());
 // eta Cloudinary(image er form data) er jonno
 app.use(express.urlencoded({ extended: true }))
+
 app.use(cors());
 
 app.use("/api/v1", router);
