@@ -133,28 +133,6 @@ export const BookingService = {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 // import httpStatus from 'http-status-codes';
 // import AppError from "../../errorHelpers/AppError";
