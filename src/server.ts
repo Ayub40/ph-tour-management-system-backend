@@ -82,7 +82,6 @@ process.on("uncaughtException", (err) => {
 // Uncaught Exception Error
 // throw new Error("I forgot to handle this local error")
 
-
 /**
  * unhandled rejection error
  * uncaught rejection error
