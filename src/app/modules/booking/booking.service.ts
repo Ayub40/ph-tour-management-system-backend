@@ -64,6 +64,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
             .populate("tour", "title costFrom")
             .populate("payment");
 
+        // Essential info for SSLCommerz
         const userAddress = (updatedBooking?.user as any).address
         const userEmail = (updatedBooking?.user as any).email
         const userPhoneNumber = (updatedBooking?.user as any).phone
@@ -117,8 +118,11 @@ const updateBookingStatus = async (
 };
 
 const getAllBookings = async () => {
-
-    return {}
+    const bookings = await Booking.find()
+        .populate("user", "name email phone address")
+        .populate("tour", "title costFrom")
+        .populate("payment");
+    return bookings
 };
 
 export const BookingService = {

@@ -47,7 +47,7 @@ const getAllBookings = catchAsync(
             statusCode: 200,
             success: true,
             message: "Bookings retrieved successfully",
-            data: {},
+            data: bookings,
             // meta: {},
         });
     }
@@ -70,9 +70,9 @@ const updateBookingStatus = catchAsync(
 
 export const BookingController = {
     createBooking,
-    getAllBookings,
     getSingleBooking,
     getUserBookings,
+    getAllBookings,
     updateBookingStatus,
 }
 
