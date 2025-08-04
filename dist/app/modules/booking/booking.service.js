@@ -16,14 +16,14 @@ exports.BookingService = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const AppError_1 = __importDefault(require("../../errorHelpers/AppError"));
-const user_model_1 = require("../user/user.model");
-const booking_interface_1 = require("./booking.interface");
-const tour_model_1 = require("../tour/tour.model");
-const booking_model_1 = require("./booking.model");
+const getTransactionId_1 = require("../../utils/getTransactionId");
 const payment_interface_1 = require("../payment/payment.interface");
 const payment_model_1 = require("../payment/payment.model");
 const sslCommerz_service_1 = require("../sslCommerz/sslCommerz.service");
-const getTransactionId_1 = require("../../utils/getTransactionId");
+const tour_model_1 = require("../tour/tour.model");
+const user_model_1 = require("../user/user.model");
+const booking_interface_1 = require("./booking.interface");
+const booking_model_1 = require("./booking.model");
 /**
  * Duplicate DB Collections / replica
  *
@@ -31,7 +31,6 @@ const getTransactionId_1 = require("../../utils/getTransactionId");
  */
 const createBooking = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const transactionId = (0, getTransactionId_1.getTransactionId)();
-    // console.log(payload);
     const session = yield booking_model_1.Booking.startSession();
     session.startTransaction();
     try {
@@ -52,12 +51,12 @@ const createBooking = (payload, userId) => __awaiter(void 0, void 0, void 0, fun
                 transactionId: transactionId,
                 amount: amount
             }], { session });
-        // payment update ( because ager payment tai payment unpaid silo. paid hoyor por eta hobe )
         const updatedBooking = yield booking_model_1.Booking
             .findByIdAndUpdate(booking[0]._id, { payment: payment[0]._id }, { new: true, runValidators: true, session })
             .populate("user", "name email phone address")
             .populate("tour", "title costFrom")
             .populate("payment");
+        // Essential info for SSLCommerz
         const userAddress = (updatedBooking === null || updatedBooking === void 0 ? void 0 : updatedBooking.user).address;
         const userEmail = (updatedBooking === null || updatedBooking === void 0 ? void 0 : updatedBooking.user).email;
         const userPhoneNumber = (updatedBooking === null || updatedBooking === void 0 ? void 0 : updatedBooking.user).phone;
@@ -75,7 +74,6 @@ const createBooking = (payload, userId) => __awaiter(void 0, void 0, void 0, fun
         yield session.commitTransaction(); //transaction
         session.endSession();
         return {
-            // payment: sslPayment,
             paymentUrl: sslPayment.GatewayPageURL,
             booking: updatedBooking
         };
@@ -89,10 +87,117 @@ const createBooking = (payload, userId) => __awaiter(void 0, void 0, void 0, fun
 });
 // Frontend(localhost:5173) - User - Tour - Booking (Pending) - Payment(Unpaid) -> SSLCommerz Page -> Payment Complete -> Backend(localhost:5000/api/v1/payment/success) -> Update Payment(PAID) & Booking(CONFIRM) -> redirect to frontend -> Frontend(localhost:5173/payment/success)
 // Frontend(localhost:5173) - User - Tour - Booking (Pending) - Payment(Unpaid) -> SSLCommerz Page -> Payment Fail / Cancel -> Backend(localhost:5000) -> Update Payment(FAIL / CANCEL) & Booking(FAIL / CANCEL) -> redirect to frontend -> Frontend(localhost:5173/payment/cancel or localhost:5173/payment/fail)
+const getUserBookings = () => __awaiter(void 0, void 0, void 0, function* () {
+    return {};
+});
+const getBookingById = () => __awaiter(void 0, void 0, void 0, function* () {
+    return {};
+});
+const updateBookingStatus = () => __awaiter(void 0, void 0, void 0, function* () {
+    return {};
+});
+const getAllBookings = () => __awaiter(void 0, void 0, void 0, function* () {
+    const bookings = yield booking_model_1.Booking.find()
+        .populate("user", "name email phone address")
+        .populate("tour", "title costFrom")
+        .populate("payment");
+    return bookings;
+});
 exports.BookingService = {
     createBooking,
-    // getUserBookings,
-    // getBookingById,
-    // updateBookingStatus,
-    // getAllBookings,
+    getUserBookings,
+    getBookingById,
+    updateBookingStatus,
+    getAllBookings,
 };
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// import httpStatus from 'http-status-codes';
+// import AppError from "../../errorHelpers/AppError";
+// import { User } from "../user/user.model";
+// import { BOOKING_STATUS, IBooking } from "./booking.interface";
+// import { Tour } from '../tour/tour.model';
+// import { Booking } from './booking.model';
+// import { PAYMENT_STATUS } from '../payment/payment.interface';
+// import { Payment } from '../payment/payment.model';
+// import { ISSLCommerz } from '../sslCommerz/sslCommerz.interface';
+// import { SSLService } from '../sslCommerz/sslCommerz.service';
+// import { getTransactionId } from '../../utils/getTransactionId';
+// /**
+//  * Duplicate DB Collections / replica
+//  *
+//  * Relica DB -> [ Create Booking -> Create Payment ->  Update Booking -> Error] -> Real DB
+//  */
+// const createBooking = async (payload: Partial<IBooking>, userId: string) => {
+//     const transactionId = getTransactionId()
+//     // console.log(payload);
+//     const session = await Booking.startSession();
+//     session.startTransaction()
+//     try {
+//         const user = await User.findById(userId);
+//         if (!user?.phone || !user.address) {
+//             throw new AppError(httpStatus.BAD_REQUEST, "Please Update Your Profile to Book a Tour.")
+//         }
+//         const tour = await Tour.findById(payload.tour).select("costFrom")
+//         if (!tour?.costFrom) {
+//             throw new AppError(httpStatus.BAD_REQUEST, "No Tour Cost Found!")
+//         }
+//         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//         const amount = Number(tour.costFrom) * Number(payload.guestCount!)
+//         const booking = await Booking.create([{
+//             user: userId,
+//             status: BOOKING_STATUS.PENDING,
+//             ...payload
+//         }], { session })
+//         const payment = await Payment.create([{
+//             booking: booking[0]._id,
+//             status: PAYMENT_STATUS.UNPAID,
+//             transactionId: transactionId,
+//             amount: amount
+//         }], { session })
+//         // payment update ( because ager payment tai payment unpaid silo. paid hoyor por eta hobe )
+//         const updatedBooking = await Booking
+//             .findByIdAndUpdate(
+//                 booking[0]._id,
+//                 { payment: payment[0]._id },
+//                 { new: true, runValidators: true, session }
+//             )
+//             .populate("user", "name email phone address")
+//             .populate("tour", "title costFrom")
+//             .populate("payment");
+//         const userAddress = (updatedBooking?.user as any).address
+//         const userEmail = (updatedBooking?.user as any).email
+//         const userPhoneNumber = (updatedBooking?.user as any).phone
+//         const userName = (updatedBooking?.user as any).name
+//         const sslPayload: ISSLCommerz = {
+//             address: userAddress,
+//             email: userEmail,
+//             phoneNumber: userPhoneNumber,
+//             name: userName,
+//             amount: amount,
+//             transactionId: transactionId
+//         }
+//         const sslPayment = await SSLService.sslPaymentInit(sslPayload)
+//         console.log(sslPayment);
+//         await session.commitTransaction(); //transaction
+//         session.endSession()
+//         return {
+//             // payment: sslPayment,
+//             paymentUrl: sslPayment.GatewayPageURL,
+//             booking: updatedBooking
+//         }
+//     } catch (error) {
+//         await session.abortTransaction(); // rollback
+//         session.endSession()
+//         // throw new AppError(httpStatus.BAD_REQUEST, error) ❌❌
+//         throw error
+//     }
+// };
+// // Frontend(localhost:5173) - User - Tour - Booking (Pending) - Payment(Unpaid) -> SSLCommerz Page -> Payment Complete -> Backend(localhost:5000/api/v1/payment/success) -> Update Payment(PAID) & Booking(CONFIRM) -> redirect to frontend -> Frontend(localhost:5173/payment/success)
+// // Frontend(localhost:5173) - User - Tour - Booking (Pending) - Payment(Unpaid) -> SSLCommerz Page -> Payment Fail / Cancel -> Backend(localhost:5000) -> Update Payment(FAIL / CANCEL) & Booking(FAIL / CANCEL) -> redirect to frontend -> Frontend(localhost:5173/payment/cancel or localhost:5173/payment/fail)
+// export const BookingService = {
+//     createBooking,
+//     // getUserBookings,
+//     // getBookingById,
+//     // updateBookingStatus,
+//     // getAllBookings,
+// };

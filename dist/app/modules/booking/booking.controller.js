@@ -23,10 +23,70 @@ const createBooking = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 
         data: booking,
     });
 }));
+const getUserBookings = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const bookings = yield booking_service_1.BookingService.getUserBookings();
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: 200,
+        success: true,
+        message: "Bookings retrieved successfully",
+        data: bookings,
+    });
+}));
+const getSingleBooking = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const booking = yield booking_service_1.BookingService.getBookingById();
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: 200,
+        success: true,
+        message: "Booking retrieved successfully",
+        data: booking,
+    });
+}));
+const getAllBookings = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const bookings = yield booking_service_1.BookingService.getAllBookings();
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: 200,
+        success: true,
+        message: "Bookings retrieved successfully",
+        data: bookings,
+        // meta: {},
+    });
+}));
+const updateBookingStatus = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const updated = yield booking_service_1.BookingService.updateBookingStatus();
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: 200,
+        success: true,
+        message: "Booking Status Updated Successfully",
+        data: updated,
+    });
+}));
 exports.BookingController = {
     createBooking,
-    // getAllBookings,
-    // getSingleBooking,
-    // getUserBookings,
-    // updateBookingStatus,
+    getSingleBooking,
+    getUserBookings,
+    getAllBookings,
+    updateBookingStatus,
 };
+// import { Request, Response } from "express";
+// import { JwtPayload } from "jsonwebtoken";
+// import { catchAsync } from "../../utils/catchAsync";
+// import { sendResponse } from "../../utils/sendResponse";
+// import { BookingService } from "./booking.service";
+// const createBooking = catchAsync(async (req: Request, res: Response) => {
+//     const decodeToken = req.user as JwtPayload
+//     const booking = await BookingService.createBooking(req.body, decodeToken.userId);
+//     sendResponse(res, {
+//         statusCode: 201,
+//         success: true,
+//         message: "Booking created successfully",
+//         data: booking,
+//     });
+// });
+// export const BookingController = {
+//     createBooking,
+//     // getAllBookings,
+//     // getSingleBooking,
+//     // getUserBookings,
+//     // updateBookingStatus,
+// }

@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserZodSchema = exports.createUserZodSchema = void 0;
 const zod_1 = __importDefault(require("zod"));
 const user_interface_1 = require("./user.interface");
-// import { IsActive, Role } from "./user.interface";
 exports.createUserZodSchema = zod_1.default.object({
     name: zod_1.default
         .string({ invalid_type_error: "Name must be string" })
