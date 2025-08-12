@@ -190,9 +190,28 @@ const createTourType = async (payload: ITourType) => {
     // return await TourType.create({ name });
     return await TourType.create({ name: payload });
 };
-const getAllTourTypes = async () => {
-    return await TourType.find();
+
+// const getAllTourTypes = async () => {
+//     return await TourType.find();
+// };
+
+const getAllTourTypes = async (query: Record<string, string>) => {
+    const queryBuilder = new QueryBuilder(TourType.find(), query);
+
+    const tourTypes = await queryBuilder
+        .filter()
+        .sort()
+        .fields()
+        .paginate();
+
+    const [data, meta] = await Promise.all([
+        tourTypes.build(),
+        queryBuilder.getMeta()
+    ]);
+
+    return { data, meta };
 };
+
 const updateTourType = async (id: string, payload: ITourType) => {
     const existingTourType = await TourType.findById(id);
     if (!existingTourType) {
@@ -202,6 +221,7 @@ const updateTourType = async (id: string, payload: ITourType) => {
     const updatedTourType = await TourType.findByIdAndUpdate(id, payload, { new: true });
     return updatedTourType;
 };
+
 const deleteTourType = async (id: string) => {
     const existingTourType = await TourType.findById(id);
     if (!existingTourType) {
