@@ -1,3 +1,4 @@
+// import { generatePdf, IInvoiceData } from './../../utils/invoice';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status-codes';
 import AppError from "../../errorHelpers/AppError";
@@ -7,6 +8,9 @@ import { ISSLCommerz } from "../sslCommerz/sslCommerz.interface";
 import { SSLService } from "../sslCommerz/sslCommerz.service";
 import { PAYMENT_STATUS } from "./payment.interface";
 import { Payment } from "./payment.model";
+// import { ITour } from '../tour/tour.interface';
+// import { IUser } from '../user/user.interface';
+// import { sendEmail } from '../../utils/sendEmail';
 
 // booking cancel korar poro abr booking korar system "initPayment" e show kora hoiese
 const initPayment = async (bookingId: string) => {
@@ -55,12 +59,27 @@ const successPayment = async (query: Record<string, string>) => {
             status: PAYMENT_STATUS.PAID,
         }, { new: true, runValidators: true, session: session })
 
+        // For Invoice Pdf 1
+
+
+        // const updatedBooking = await Booking
         await Booking
             .findByIdAndUpdate(
                 updatedPayment?.booking,
                 { status: BOOKING_STATUS.COMPLETE },
-                { runValidators: true, session }
+                // { runValidators: true, session }
+                // pdf make korte lage
+                { new: true, runValidators: true, session }
             )
+        // For Invoice Pdf 2
+
+
+        // For Invoice Pdf 3
+
+
+        // For Invoice Pdf 4
+
+
 
         await session.commitTransaction(); //transaction
         session.endSession()
