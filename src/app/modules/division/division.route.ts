@@ -36,6 +36,6 @@ router.patch(
     validateRequest(updateDivisionSchema),
     DivisionController.updateDivision
 );
-router.delete("/:id", checkAuth(Role.ADMIN, Role.SUPER_ADMIN), DivisionController.deleteDivision);
+router.delete("/delete-division/:id", checkAuth(Role.ADMIN, Role.SUPER_ADMIN), DivisionController.deleteDivision);
 
 export const DivisionRoutes = router
