@@ -28,6 +28,7 @@ app.set("trust proxy", 1);
 // eta Cloudinary(image er form data) er jonno
 app.use(express.urlencoded({ extended: true }))
 
+// ekhane link dite hoy
 app.use(cors({
     origin: envVars.FRONTEND_URL,
     credentials: true
